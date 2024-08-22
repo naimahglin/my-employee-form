@@ -1,7 +1,6 @@
 import React from 'react';
 import './EmployeeForm.css';
 
-
 class EmployeeForm extends React.Component {
   constructor(props) {
     super(props);
@@ -21,6 +20,11 @@ class EmployeeForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     console.log('Form submitted:', this.state);
+    
+    // Pass the form data to the parent component (App.js)
+    this.props.addEmployee(this.state);
+
+    // Clear the form fields
     this.setState({ name: '', email: '', title: '', department: '' });
   };
 
@@ -35,6 +39,7 @@ class EmployeeForm extends React.Component {
             name="name"
             value={this.state.name}
             onChange={this.handleChange}
+            autoComplete="name"
           />
         </div>
         <div>
@@ -45,6 +50,7 @@ class EmployeeForm extends React.Component {
             name="email"
             value={this.state.email}
             onChange={this.handleChange}
+            autoComplete="email"
           />
         </div>
         <div>
@@ -55,6 +61,7 @@ class EmployeeForm extends React.Component {
             name="title"
             value={this.state.title}
             onChange={this.handleChange}
+            autoComplete="organization-title"
           />
         </div>
         <div>
@@ -65,6 +72,7 @@ class EmployeeForm extends React.Component {
             name="department"
             value={this.state.department}
             onChange={this.handleChange}
+            autoComplete="organization"
           />
         </div>
         <button type="submit">Submit</button>
