@@ -1,84 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './EmployeeForm.css';
 
-class EmployeeForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      email: '',
-      title: '',
-      department: '',
-    };
-  }
+function EmployeeForm({ addEmployee }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [position, setPosition] = useState(''); // New position state
 
-  handleChange = (event) => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!name || !email || !phone || !position) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    const newEmployee = { name, email, phone, position }; // Include position in the new employee object
+    addEmployee(newEmployee);
+    setName('');
+    setEmail('');
+    setPhone('');
+    setPosition(''); // Reset position field after submission
   };
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    console.log('Form submitted:', this.state);
-    
-    // Pass the form data to the parent component (App.js)
-    this.props.addEmployee(this.state);
-
-    // Clear the form fields
-    this.setState({ name: '', email: '', title: '', department: '' });
-  };
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={this.state.name}
-            onChange={this.handleChange}
-            autoComplete="name"
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={this.state.email}
-            onChange={this.handleChange}
-            autoComplete="email"
-          />
-        </div>
-        <div>
-          <label htmlFor="title">Job Title:</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={this.state.title}
-            onChange={this.handleChange}
-            autoComplete="organization-title"
-          />
-        </div>
-        <div>
-          <label htmlFor="department">Department:</label>
-          <input
-            type="text"
-            id="department"
-            name="department"
-            value={this.state.department}
-            onChange={this.handleChange}
-            autoComplete="organization"
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
-    );
-  }
+  return (
+    <form onSubmit={handleSubmit} className="employee-form">
+      <h1>Add Employee</h1>
+      <label>Name:</label>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+      <label>Email:</label>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <label>Phone:</label>
+      <input
+        type="tel"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        required
+      />
+      <label>Position:</label>
+      <input
+        type="text"
+        value={position}
+        onChange={(e) => setPosition(e.target.value)} // Corrected Position Input
+        required
+      />
+      <button type="submit">Add</button>
+    </form>
+  );
 }
 
 export default EmployeeForm;
